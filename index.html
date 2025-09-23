@@ -95,7 +95,7 @@
     function handleChoice(selected) {
       if (selected === answer) {
         correctIndex = currentIndex;
-        feedback.textContent = `🎉 Correct! You guessed it in ${currentIndex + 1} ${currentIndex === 0 ? 'image' : 'images'}.`;
+        feedback.textContent = `Correct! You guessed it in ${currentIndex + 1} ${currentIndex === 0 ? 'image' : 'images'}.`;
         showProgression();
         endGame();
       } else {
