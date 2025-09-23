@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progressive Guessing Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-color: #f0f0f0;
+    }
+    img {
+      max-width: 80%;
+      height: auto;
+      margin-bottom: 20px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+    }
+    .thumbnail {
+      max-width: 100px;
+      margin: 5px;
+      border: 2px solid #888;
+      border-radius: 5px;
+    }
+    .highlight {
+      border-color: green;
+      border-width: 4px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      border: 1px solid #888;
+      background-color: #fff;
+    }
+    button:hover {
+      background-color: #ddd;
+    }
+    #feedback {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    #progression {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Guess the Answer!</h1>
+  <img id="gameImage" src="" alt="Guess this image">
+  <div>
+    <button id="choiceA"></button>
+    <button id="choiceB"></button>
+    <button id="skip">Skip</button>
+  </div>
+  <div id="feedback"></div>
+  <div id="progression"></div>
+
+  <script>
+    // Customize your game here
+    const images = [
+      "rob11.png",
+      "rob12.png",
+      "rob13.png",
+      "rob14.png",
+      "rob15.png",
+      "rob16.png"
+    ];
+
+    const answer = "Rob"; // The correct answer for all images
+    const options = ["Rob", "Hannah"]; // Two choices
+
+    let currentIndex = 0;
+    let attempts = 0; // Track how many images were shown before correct guess
+    let correctIndex = -1; // Index where user guessed correctly (-1 if never)
+
+    const gameImage = document.getElementById("gameImage");
+    const choiceA = document.getElementById("choiceA");
+    const choiceB = document.getElementById("choiceB");
+    const skip = document.getElementById("skip");
+    const feedback = document.getElementById("feedback");
+    const progression = document.getElementById("progression");
+
+    function loadImage(index) {
+      gameImage.src = images[index];
+      choiceA.textContent = options[0];
+      choiceB.textContent = options[1];
+      feedback.textContent = "";
+    }
+
+    function handleChoice(selected) {
+      attempts++;
+      if (selected === answer) {
+        correctIndex = currentIndex;
+        feedback.textContent = `🎉 Correct! You guessed it in ${attempts} ${attempts === 1 ? 'image' : 'images'}.`;
+        showProgression();
+        endGame();
+      } else {
+        nextImage();
+      }
+    }
+
+    function nextImage() {
+      attempts++;
+      currentIndex++;
+      if (currentIndex < images.length) {
+        loadImage(currentIndex);
+      } else {
+        feedback.textContent = `❌ Out of images! The correct answer was "${answer}". You took ${attempts} ${attempts === 1 ? 'image' : 'images'}.`;
+        showProgression();
+        endGame();
+      }
+    }
+
+    function endGame() {
+      gameImage.style.display = "none";
+      choiceA.style.display = "none";
+      choiceB.style.display = "none";
+      skip.style.display = "none";
+    }
+
+    function showProgression() {
+      progression.innerHTML = "<h2>Image Progression:</h2>";
+      images.forEach((imgSrc, index) => {
+        const imgElem = document.createElement("img");
+        imgElem.src = imgSrc;
+        imgElem.className = "thumbnail";
+        if (index === correctIndex) {
+          imgElem.classList.add("highlight"); // Highlight the correct guess
+        }
+        progression.appendChild(imgElem);
+      });
+    }
+
+    choiceA.addEventListener("click", () => handleChoice(choiceA.textContent));
+    choiceB.addEventListener("click", () => handleChoice(choiceB.textContent));
+    skip.addEventListener("click", nextImage);
+
+    // Start the game
+    loadImage(currentIndex);
+  </script>
+
+</body>
+</html>
