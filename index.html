@@ -76,7 +76,6 @@
     const options = ["Rob", "Hannah"]; // Two choices
 
     let currentIndex = 0;
-    let attempts = 0; // Track how many images were shown before correct guess
     let correctIndex = -1; // Index where user guessed correctly (-1 if never)
 
     const gameImage = document.getElementById("gameImage");
@@ -94,10 +93,9 @@
     }
 
     function handleChoice(selected) {
-      attempts++;
       if (selected === answer) {
         correctIndex = currentIndex;
-        feedback.textContent = `🎉 Correct! You guessed it in ${attempts} ${attempts === 1 ? 'image' : 'images'}.`;
+        feedback.textContent = `🎉 Correct! You guessed it in ${currentIndex + 1} ${currentIndex === 0 ? 'image' : 'images'}.`;
         showProgression();
         endGame();
       } else {
@@ -106,12 +104,11 @@
     }
 
     function nextImage() {
-      attempts++;
       currentIndex++;
       if (currentIndex < images.length) {
         loadImage(currentIndex);
       } else {
-        feedback.textContent = `❌ Out of images! The correct answer was "${answer}". You took ${attempts} ${attempts === 1 ? 'image' : 'images'}.`;
+        feedback.textContent = `❌ Out of images! The correct answer was "${answer}". You used all ${images.length} images.`;
         showProgression();
         endGame();
       }
